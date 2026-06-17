@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>生日快乐！</title>
+  <!-- 引入彩带动画库 -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.min.js"></script>
   <style>
     body {
       font-family: 'Comic Sans MS', cursive, sans-serif;
@@ -15,6 +17,7 @@
       justify-content: center;
       align-items: center;
       text-align: center;
+      overflow-x: hidden;
     }
     .card {
       background: white;
@@ -23,6 +26,8 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
       max-width: 90%;
       width: 500px;
+      position: relative;
+      z-index: 10;
     }
     .photo {
       width: 200px;
@@ -32,35 +37,120 @@
       border: 5px solid #ff6b6b;
       margin: 20px 0;
     }
-    h1 {
-      color: #ff6b6b;
-      font-size: 2.5rem;
-      margin: 10px 0;
+    h1 { color: #ff6b6b; font-size: 2.5rem; margin: 10px 0; }
+    p { font-size: 1.2rem; color: #555; line-height: 1.6; }
+    
+    /* 隐藏祝福弹窗样式 */
+    .hidden-wish {
+      display: none;
+      margin-top: 20px;
+      padding: 15px;
+      background: #fff3cd;
+      border-radius: 10px;
+      border: 2px dashed #ffc107;
+      animation: fadeIn 0.8s ease;
     }
-    p {
-      font-size: 1.2rem;
-      color: #555;
-      line-height: 1.6;
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    /* 按钮样式 */
+    .surprise-btn {
+      margin-top: 20px;
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      background: #ff6b6b;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(255,107,107,0.4);
     }
-    .confetti {
-      font-size: 2rem;
-      margin: 10px 0;
+    .surprise-btn:hover { transform: scale(1.05); background: #ff5252; }
+    
+    /* 音乐控制按钮（右下角） */
+    .music-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: white;
+      border: 2px solid #ff6b6b;
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
   </style>
 </head>
 <body>
+  <!-- 🎵 背景音乐（使用免版权生日歌） -->
+  <audio id="bgm" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8c8a73467.mp3?filename=happy-birthday-111751.mp3" type="audio/mpeg">
+  </audio>
+  
   <div class="card">
-    <div class="confetti">🎉🎂🎁</div>
+    <div style="font-size:2rem; margin-bottom:10px;">🎉🎂🎁</div>
     <h1>生日快乐！</h1>
     
-    <!-- 替换下面的 src 为你朋友的照片 -->
-    <img src="/yinwei.jpg" alt="寿星" class="photo">
+    <!-- 替换为你的照片文件名 -->
+    <img src="/photo.jpg" alt="寿星" class="photo">
     
-    <p>亲爱的朋友，<br>
-       愿你新的一岁平安喜乐，梦想成真！<br>
-       感谢一路有你 ❤️</p>
-       
-    <div class="confetti">🎈✨🎊</div>
+    <p>亲爱的朋友，<br>愿你新的一岁平安喜乐，梦想成真！<br>感谢一路有你 ❤️</p>
+    
+    <!-- 💌 隐藏祝福按钮 -->
+    <button class="surprise-btn" onclick="showWish()">🎁 点击领取专属祝福</button>
+    <div id="hiddenWish" class="hidden-wish">
+      <p style="margin:0; color:#856404; font-weight:bold;">
+        🌟 偷偷告诉你：<br>
+        你是我见过最温暖的人，<br>
+        愿所有美好都如期而至！<br>
+        （永远支持你的杰）
+      </p>
+    </div>
   </div>
+
+  <!-- 🎵 音乐开关 -->
+  <button class="music-toggle" id="musicBtn" onclick="toggleMusic()">🔇</button>
+
+  <script>
+    // ✨ 页面加载时自动放彩带
+    window.addEventListener('load', () => {
+      confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+      // 每3秒补一次彩带，持续15秒
+      let count = 0;
+      const interval = setInterval(() => {
+        confetti({ particleCount: 50, angle: 60, spread: 55, origin: { x: 0 } });
+        confetti({ particleCount: 50, angle: 120, spread: 55, origin: { x: 1 } });
+        if (++count > 4) clearInterval(interval);
+      }, 3000);
+    });
+
+    // 💌 显示隐藏祝福 + 触发彩带
+    function showWish() {
+      const wish = document.getElementById('hiddenWish');
+      wish.style.display = 'block';
+      confetti({ particleCount: 100, spread: 100, origin: { y: 0.7 } });
+      // 播放音乐（如果还没播）
+      const audio = document.getElementById('bgm');
+      if (audio.paused) toggleMusic();
+    }
+
+    // 🎵 音乐开关逻辑
+    function toggleMusic() {
+      const audio = document.getElementById('bgm');
+      const btn = document.getElementById('musicBtn');
+      if (audio.paused) {
+        audio.play().then(() => { btn.textContent = '🔊'; }).catch(e => console.log('需用户交互后播放'));
+      } else {
+        audio.pause();
+        btn.textContent = '🔇';
+      }
+    }
+  </script>
 </body>
 </html>
