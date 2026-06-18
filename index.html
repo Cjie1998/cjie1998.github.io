@@ -3,10 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>生日快乐！</title>
-  <!-- 引入彩带动画库 -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.min.js"></script>
+  <title>🎂 生日快乐！</title>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Comic Sans MS', cursive, sans-serif;
       background: linear-gradient(135deg, #ffafbd, #ffc3a0);
@@ -17,8 +21,69 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      overflow-x: hidden;
+      overflow: hidden;
+      position: relative;
     }
+
+    /* ============ CSS彩带动画 ============ */
+    .confetti-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      top: -20px;
+      animation: confettiFall linear forwards;
+    }
+
+    @keyframes confettiFall {
+      0% {
+        transform: translateY(0) rotate(0deg) scale(1);
+        opacity: 1;
+      }
+      25% {
+        transform: translateY(25vh) rotate(90deg) scale(1.2);
+        opacity: 0.9;
+      }
+      50% {
+        transform: translateY(50vh) rotate(180deg) scale(0.8);
+        opacity: 0.7;
+      }
+      75% {
+        transform: translateY(75vh) rotate(270deg) scale(1.1);
+        opacity: 0.5;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg) scale(0.5);
+        opacity: 0;
+      }
+    }
+
+    /* 不同形状的彩带 */
+    .confetti-piece.circle {
+      border-radius: 50%;
+    }
+    .confetti-piece.square {
+      border-radius: 2px;
+    }
+    .confetti-piece.triangle {
+      width: 0;
+      height: 0;
+      background: transparent !important;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-bottom: 12px solid;
+    }
+
+    /* ============ 主卡片样式 ============ */
     .card {
       background: white;
       border-radius: 20px;
@@ -28,7 +93,16 @@
       width: 500px;
       position: relative;
       z-index: 10;
+      animation: cardBounce 0.6s ease-out;
     }
+
+    @keyframes cardBounce {
+      0% { transform: scale(0.3); opacity: 0; }
+      50% { transform: scale(1.05); }
+      70% { transform: scale(0.95); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
     .photo {
       width: 200px;
       height: 200px;
@@ -36,11 +110,21 @@
       border-radius: 50%;
       border: 5px solid #ff6b6b;
       margin: 20px 0;
+      box-shadow: 0 5px 15px rgba(255,107,107,0.3);
+      transition: transform 0.3s;
     }
-    h1 { color: #ff6b6b; font-size: 2.5rem; margin: 10px 0; }
+    .photo:hover {
+      transform: scale(1.05) rotate(3deg);
+    }
+
+    h1 { 
+      color: #ff6b6b; 
+      font-size: 2.5rem; 
+      margin: 10px 0;
+      text-shadow: 2px 2px 0 rgba(255,107,107,0.2);
+    }
     p { font-size: 1.2rem; color: #555; line-height: 1.6; }
     
-    /* 隐藏祝福弹窗样式 */
     .hidden-wish {
       display: none;
       margin-top: 20px;
@@ -50,9 +134,11 @@
       border: 2px dashed #ffc107;
       animation: fadeIn 0.8s ease;
     }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { 
+      from { opacity: 0; transform: translateY(10px); } 
+      to { opacity: 1; transform: translateY(0); } 
+    }
     
-    /* 按钮样式 */
     .surprise-btn {
       margin-top: 20px;
       padding: 12px 30px;
@@ -64,10 +150,18 @@
       cursor: pointer;
       transition: all 0.3s;
       box-shadow: 0 4px 15px rgba(255,107,107,0.4);
+      position: relative;
+      overflow: hidden;
     }
-    .surprise-btn:hover { transform: scale(1.05); background: #ff5252; }
+    .surprise-btn:hover { 
+      transform: scale(1.05); 
+      background: #ff5252;
+      box-shadow: 0 6px 20px rgba(255,107,107,0.6);
+    }
+    .surprise-btn:active {
+      transform: scale(0.95);
+    }
     
-    /* 音乐控制按钮（右下角） */
     .music-toggle {
       position: fixed;
       bottom: 20px;
@@ -79,31 +173,38 @@
       border: 2px solid #ff6b6b;
       font-size: 1.5rem;
       cursor: pointer;
-      z-index: 100;
+      z-index: 1000;
       display: flex;
       align-items: center;
       justify-content: center;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: all 0.3s;
+    }
+    .music-toggle:hover {
+      transform: scale(1.1);
+      background: #fff5f5;
     }
   </style>
 </head>
 <body>
-  <!-- 🎵 背景音乐（使用免版权生日歌） -->
-  <audio id="bgm" loop>
-    <source src="/birthday.mp3" type="audio/mpeg">
+  <!-- 🎵 背景音乐 -->
+  <audio id="bgm" loop preload="auto">
+    <source src="./birthday.mp3" type="audio/mpeg">
   </audio>
+
+  <!-- 🌈 CSS彩带容器 -->
+  <div class="confetti-container" id="confettiContainer"></div>
   
   <div class="card">
     <div style="font-size:2rem; margin-bottom:10px;">🎉🎂🎁</div>
     <h1>生日快乐！</h1>
     
-    <!-- 替换为你的照片文件名 -->
-    <img src="/photo.jpg" alt="寿星" class="photo">
+    <!-- 使用本地照片 -->
+    <img src="./photo.jpg" alt="寿星" class="photo" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22200%22%3E%3Crect%20fill%3D%22%23ffb6c1%22%20width%3D%22200%22%20height%3D%22200%22%2F%3E%3Ctext%20fill%3D%22white%22%20font-size%3D%2220%22%20x%3D%2250%22%20y%3D%22110%22%3E🌟%20寿星%20🌟%3C%2Ftext%3E%3C%2Fsvg%3E'">
     
     <p>亲爱的朋友，<br>愿你新的一岁平安喜乐，梦想成真！<br>感谢一路有你 ❤️</p>
     
-    <!-- 💌 隐藏祝福按钮 -->
-    <button class="surprise-btn" onclick="showWish()">🎁 点击领取专属祝福</button>
+    <button class="surprise-btn" id="surpriseBtn">🎁 点击领取专属祝福</button>
     <div id="hiddenWish" class="hidden-wish">
       <p style="margin:0; color:#856404; font-weight:bold;">
         🌟 偷偷告诉你：<br>
@@ -114,43 +215,156 @@
     </div>
   </div>
 
-  <!-- 🎵 音乐开关 -->
-  <button class="music-toggle" id="musicBtn" onclick="toggleMusic()">🔇</button>
+  <!-- 音乐开关按钮 -->
+  <button class="music-toggle" id="musicBtn">🔇</button>
 
   <script>
-    // ✨ 页面加载时自动放彩带
-    window.addEventListener('load', () => {
-      confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-      // 每3秒补一次彩带，持续15秒
-      let count = 0;
+    // ============ 彩色纸片生成器 ============
+    function createConfetti() {
+      const container = document.getElementById('confettiContainer');
+      const colors = [
+        '#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#ff922b',
+        '#ff6eb4', '#845ef7', '#20c997', '#ff6b6b', '#f06595',
+        '#ffa94d', '#94d82d', '#20c997', '#fcc419', '#ff8787'
+      ];
+      
+      const shapes = ['circle', 'square', 'triangle'];
+      
+      // 清除旧的彩带
+      container.innerHTML = '';
+      
+      // 创建100个彩带碎片
+      for (let i = 0; i < 100; i++) {
+        const piece = document.createElement('div');
+        const shape = shapes[Math.floor(Math.random() * shapes.length)];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        
+        piece.className = `confetti-piece ${shape}`;
+        piece.style.left = Math.random() * 100 + '%';
+        piece.style.backgroundColor = shape !== 'triangle' ? color : 'transparent';
+        if (shape === 'triangle') {
+          piece.style.borderBottomColor = color;
+        }
+        piece.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        piece.style.animationDelay = Math.random() * 2 + 's';
+        piece.style.width = (Math.random() * 10 + 8) + 'px';
+        piece.style.height = shape !== 'triangle' ? (Math.random() * 10 + 8) + 'px' : '0';
+        
+        container.appendChild(piece);
+      }
+      
+      // 5秒后自动清除彩带（它们会自然掉落完毕）
+      setTimeout(() => {
+        container.innerHTML = '';
+      }, 5000);
+    }
+
+    // 持续生成彩带
+    function startContinuousConfetti() {
+      createConfetti();
+      // 每4秒重新生成一波彩带
       const interval = setInterval(() => {
-        confetti({ particleCount: 50, angle: 60, spread: 55, origin: { x: 0 } });
-        confetti({ particleCount: 50, angle: 120, spread: 55, origin: { x: 1 } });
-        if (++count > 4) clearInterval(interval);
-      }, 3000);
+        createConfetti();
+      }, 4000);
+      
+      // 20秒后停止
+      setTimeout(() => {
+        clearInterval(interval);
+      }, 20000);
+    }
+
+    // ============ 音乐控制 ============
+    const bgm = document.getElementById('bgm');
+    const musicBtn = document.getElementById('musicBtn');
+    let musicPlaying = false;
+
+    function updateMusicIcon() {
+      musicBtn.textContent = musicPlaying ? '🔊' : '🔇';
+    }
+
+    function playMusic() {
+      bgm.play().then(() => {
+        musicPlaying = true;
+        updateMusicIcon();
+        console.log('✅ 音乐开始播放');
+      }).catch((err) => {
+        console.log('⏳ 音乐播放需要用户交互:', err.message);
+        musicPlaying = false;
+        updateMusicIcon();
+      });
+    }
+
+    function toggleMusic() {
+      if (musicPlaying) {
+        bgm.pause();
+        musicPlaying = false;
+      } else {
+        playMusic();
+      }
+      updateMusicIcon();
+    }
+
+    // 页面加载时尝试自动播放
+    window.addEventListener('load', () => {
+      console.log('📄 页面加载完成');
+      
+      // 启动彩带
+      startContinuousConfetti();
+      
+      // 尝试自动播放音乐
+      playMusic();
+      
+      // 如果自动播放失败，在用户第一次交互时播放
+      if (!musicPlaying) {
+        const playOnInteraction = () => {
+          playMusic();
+          document.removeEventListener('click', playOnInteraction);
+          document.removeEventListener('touchstart', playOnInteraction);
+          document.removeEventListener('scroll', playOnInteraction);
+        };
+        
+        document.addEventListener('click', playOnInteraction, { once: true });
+        document.addEventListener('touchstart', playOnInteraction, { once: true });
+        document.addEventListener('scroll', playOnInteraction, { once: true });
+      }
     });
 
-    // 💌 显示隐藏祝福 + 触发彩带
-    function showWish() {
-      const wish = document.getElementById('hiddenWish');
-      wish.style.display = 'block';
-      confetti({ particleCount: 100, spread: 100, origin: { y: 0.7 } });
-      // 播放音乐（如果还没播）
-      const audio = document.getElementById('bgm');
-      if (audio.paused) toggleMusic();
+    // 如果DOM已经加载完成（以防万一）
+    if (document.readyState === 'complete') {
+      startContinuousConfetti();
+      playMusic();
     }
 
-    // 🎵 音乐开关逻辑
-    function toggleMusic() {
-      const audio = document.getElementById('bgm');
-      const btn = document.getElementById('musicBtn');
-      if (audio.paused) {
-        audio.play().then(() => { btn.textContent = '🔊'; }).catch(e => console.log('需用户交互后播放'));
-      } else {
-        audio.pause();
-        btn.textContent = '🔇';
+    // 音乐按钮点击事件
+    musicBtn.addEventListener('click', toggleMusic);
+
+    // 监听音乐播放状态
+    bgm.addEventListener('play', () => {
+      musicPlaying = true;
+      updateMusicIcon();
+    });
+    
+    bgm.addEventListener('pause', () => {
+      musicPlaying = false;
+      updateMusicIcon();
+    });
+
+    // ============ 隐藏祝福 ============
+    document.getElementById('surpriseBtn').addEventListener('click', function() {
+      const wish = document.getElementById('hiddenWish');
+      wish.style.display = 'block';
+      
+      // 点击时额外发射一波彩带
+      createConfetti();
+      
+      // 如果音乐还没播放，点击后播放
+      if (!musicPlaying) {
+        playMusic();
       }
-    }
+      
+      // 平滑滚动到祝福区域
+      wish.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
   </script>
 </body>
 </html>
