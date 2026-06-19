@@ -123,18 +123,46 @@
       100% { transform: scale(1); opacity: 1; }
     }
 
-    .photo {
+    .photo-frame {
+      display: inline-block;
+      position: relative;
+      border-radius: 50%;
+      overflow: hidden;
+      margin: 20px 0;
+      box-shadow: 0 5px 15px rgba(255,107,107,0.3);
+    }
+
+    .photo-frame img {
       width: 200px;
       height: 200px;
       object-fit: cover;
-      border-radius: 50%;
+      display: block;
       border: 5px solid #ff6b6b;
-      margin: 20px 0;
-      box-shadow: 0 5px 15px rgba(255,107,107,0.3);
+      border-radius: 50%;
       transition: transform 0.3s;
     }
-    .photo:hover {
+
+    .photo-frame:hover img {
       transform: scale(1.05) rotate(3deg);
+    }
+
+    /* 照片光泽划过 */
+    .photo-frame::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -100%;
+      width: 40%;
+      height: 200%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+      transform: skewX(-20deg);
+      animation: photoShine 3.5s ease-in-out infinite;
+    }
+
+    @keyframes photoShine {
+      0%   { left: -100%; }
+      40%  { left: 160%; }
+      100% { left: 160%; }
     }
 
     h1 {
@@ -155,7 +183,22 @@
       100% { background-position: 0% 50%; }
     }
     p { font-size: 1.2rem; color: #555; line-height: 1.6; }
-    
+
+    /* 装饰分隔线 */
+    .divider {
+      margin: 10px 0 5px;
+      font-size: 1rem;
+      color: #ffb6c1;
+      letter-spacing: 4px;
+      animation: dividerPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes dividerPulse {
+      0%   { opacity: 0.5; }
+      50%  { opacity: 1; }
+      100% { opacity: 0.5; }
+    }
+
     .hidden-wish {
       display: none;
       margin-top: 20px;
@@ -179,18 +222,28 @@
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      transition: all 0.3s;
       box-shadow: 0 4px 15px rgba(255,107,107,0.4);
       position: relative;
       overflow: hidden;
+      animation: heartbeat 1.8s ease-in-out infinite;
     }
-    .surprise-btn:hover { 
-      transform: scale(1.05); 
+    .surprise-btn:hover {
+      transform: scale(1.05);
       background: #ff5252;
       box-shadow: 0 6px 20px rgba(255,107,107,0.6);
+      animation: none;
     }
     .surprise-btn:active {
       transform: scale(0.95);
+    }
+
+    @keyframes heartbeat {
+      0%   { transform: scale(1); }
+      8%   { transform: scale(1.08); }
+      16%  { transform: scale(1); }
+      24%  { transform: scale(1.05); }
+      32%  { transform: scale(1); }
+      100% { transform: scale(1); }
     }
     
     .music-toggle {
@@ -298,8 +351,15 @@
     <h1>生日快乐！</h1>
     
     <!-- 使用本地照片 -->
-    <img src="./photo.jpg" alt="寿星" class="photo" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22200%22%3E%3Crect%20fill%3D%22%23ffb6c1%22%20width%3D%22200%22%20height%3D%22200%22%2F%3E%3Ctext%20fill%3D%22white%22%20font-size%3D%2220%22%20x%3D%2250%22%20y%3D%22110%22%3E🌟%20寿星%20🌟%3C%2Ftext%3E%3C%2Fsvg%3E'">
-    
+    <div class="photo-frame">
+      <img src="./photo.jpg" alt="寿星" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22200%22%3E%3Crect%20fill%3D%22%23ffb6c1%22%20width%3D%22200%22%20height%3D%22200%22%2F%3E%3Ctext%20fill%3D%22white%22%20font-size%3D%2220%22%20x%3D%2250%22%20y%3D%22110%22%3E🌟%20寿星%20🌟%3C%2Ftext%3E%3C%2Fsvg%3E'">
+    </div>
+
+    <!-- 装饰分隔线 -->
+    <div class="divider">
+      <span>~</span> ✨ ❤️ ✨ <span>~</span>
+    </div>
+
     <p>可爱的小英，<br>愿你新的一岁平安喜乐，梦想成真！<br>网络有延迟，我的祝福没有！ ❤️</p>
     
     <button class="surprise-btn" id="surpriseBtn">🎁 点击领取专属祝福</button>
