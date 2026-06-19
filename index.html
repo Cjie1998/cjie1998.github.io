@@ -40,29 +40,35 @@
       position: absolute;
       width: 12px;
       height: 12px;
-      top: -20px;
+      top: -30px;
       animation: confettiFall linear forwards;
     }
 
     @keyframes confettiFall {
       0% {
-        transform: translateY(0) rotate(0deg) scale(1);
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 1;
+      }
+      10% {
         opacity: 1;
       }
       25% {
-        transform: translateY(25vh) rotate(90deg) scale(1.2);
+        transform: translateY(25vh) translateX(30px) rotate(120deg);
         opacity: 0.9;
       }
       50% {
-        transform: translateY(50vh) rotate(180deg) scale(0.8);
-        opacity: 0.7;
+        transform: translateY(50vh) translateX(-20px) rotate(240deg);
+        opacity: 0.75;
       }
       75% {
-        transform: translateY(75vh) rotate(270deg) scale(1.1);
+        transform: translateY(75vh) translateX(25px) rotate(320deg);
         opacity: 0.5;
       }
+      90% {
+        opacity: 0.2;
+      }
       100% {
-        transform: translateY(100vh) rotate(360deg) scale(0.5);
+        transform: translateY(105vh) translateX(-15px) rotate(400deg);
         opacity: 0;
       }
     }
@@ -202,7 +208,7 @@
     <!-- 使用本地照片 -->
     <img src="./photo.jpg" alt="寿星" class="photo" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22200%22%3E%3Crect%20fill%3D%22%23ffb6c1%22%20width%3D%22200%22%20height%3D%22200%22%2F%3E%3Ctext%20fill%3D%22white%22%20font-size%3D%2220%22%20x%3D%2250%22%20y%3D%22110%22%3E🌟%20寿星%20🌟%3C%2Ftext%3E%3C%2Fsvg%3E'">
     
-    <p>亲爱的小英，<br>愿你新的一岁平安喜乐，梦想成真！<br>网络有延迟，我的祝福没有！ ❤️</p>
+    <p>可爱的小英，<br>愿你新的一岁平安喜乐，梦想成真！<br>网络有延迟，我的祝福没有！ ❤️</p>
     
     <button class="surprise-btn" id="surpriseBtn">🎁 点击领取专属祝福</button>
     <div id="hiddenWish" class="hidden-wish">
@@ -220,52 +226,61 @@
 
   <script>
     // ============ 彩色纸片生成器 ============
-    function createConfetti() {
-      const container = document.getElementById('confettiContainer');
-      const colors = [
-        '#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#ff922b',
-        '#ff6eb4', '#845ef7', '#20c997', '#ff6b6b', '#f06595',
-        '#ffa94d', '#94d82d', '#20c997', '#fcc419', '#ff8787'
-      ];
-      
-      const shapes = ['circle', 'square', 'triangle'];
-      
-      // 清除旧的彩带
-      container.innerHTML = '';
-      
-      // 创建100个彩带碎片
-      for (let i = 0; i < 100; i++) {
-        const piece = document.createElement('div');
-        const shape = shapes[Math.floor(Math.random() * shapes.length)];
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        
-        piece.className = `confetti-piece ${shape}`;
-        piece.style.left = Math.random() * 100 + '%';
-        piece.style.backgroundColor = shape !== 'triangle' ? color : 'transparent';
-        if (shape === 'triangle') {
-          piece.style.borderBottomColor = color;
-        }
-        piece.style.animationDuration = (Math.random() * 3 + 2) + 's';
-        piece.style.animationDelay = Math.random() * 2 + 's';
-        piece.style.width = (Math.random() * 10 + 8) + 'px';
-        piece.style.height = shape !== 'triangle' ? (Math.random() * 10 + 8) + 'px' : '0';
-        
-        container.appendChild(piece);
+    const confettiContainer = document.getElementById('confettiContainer');
+    const colors = [
+      '#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#ff922b',
+      '#ff6eb4', '#845ef7', '#20c997', '#f06595', '#ffa94d',
+      '#94d82d', '#fcc419', '#ff8787', '#ff6b6b', '#ffd93d'
+    ];
+    const shapes = ['circle', 'square', 'triangle'];
+
+    // 创建一个彩带碎片，动画结束后自动移除
+    function spawnConfettiPiece() {
+      const piece = document.createElement('div');
+      const shape = shapes[Math.floor(Math.random() * shapes.length)];
+      const color = colors[Math.floor(Math.random() * colors.length)];
+
+      piece.className = `confetti-piece ${shape}`;
+      piece.style.left = Math.random() * 100 + '%';
+      piece.style.backgroundColor = shape !== 'triangle' ? color : 'transparent';
+      if (shape === 'triangle') {
+        piece.style.borderBottomColor = color;
       }
-      
-      // 5秒后自动清除彩带（它们会自然掉落完毕）
-      setTimeout(() => {
-        container.innerHTML = '';
-      }, 5000);
+      // 下落持续 3~6 秒
+      piece.style.animationDuration = (Math.random() * 3 + 3) + 's';
+      // 随机延迟，避免所有碎片同时开始
+      piece.style.animationDelay = Math.random() * 2 + 's';
+      piece.style.width = (Math.random() * 10 + 6) + 'px';
+      piece.style.height = shape !== 'triangle' ? (Math.random() * 10 + 6) + 'px' : '0';
+
+      // 动画结束后自动移除
+      piece.addEventListener('animationend', function() {
+        piece.remove();
+      });
+
+      confettiContainer.appendChild(piece);
     }
 
-    // 持续生成彩带（一直不停）
+    // 一次性生成大量彩带（用于点击惊喜按钮）
+    function burstConfetti(count) {
+      for (let i = 0; i < count; i++) {
+        // 错开生成，避免所有碎片同时落下
+        setTimeout(function() {
+          spawnConfettiPiece();
+        }, Math.random() * 800);
+      }
+    }
+
+    // 持续不断生成彩带
     function startContinuousConfetti() {
-      createConfetti();
-      // 每3秒重新生成一波彩带
-      setInterval(() => {
-        createConfetti();
-      }, 3000);
+      // 初始来一波
+      burstConfetti(60);
+      // 每隔一小段时间生成几个碎片，保持彩带不断
+      setInterval(function() {
+        for (let i = 0; i < 3; i++) {
+          spawnConfettiPiece();
+        }
+      }, 300);
     }
 
     // ============ 音乐控制 ============
@@ -350,7 +365,7 @@
       wish.style.display = 'block';
       
       // 点击时额外发射一波彩带
-      createConfetti();
+      burstConfetti(80);
       
       // 如果音乐还没播放，点击后播放
       if (!musicPlaying) {
