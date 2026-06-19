@@ -17,7 +17,7 @@
       background-size: 400% 400%;
       animation: gradientShift 8s ease infinite;
       margin: 0;
-      padding: 20px;
+      padding: clamp(8px, 3vw, 20px);
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -100,12 +100,11 @@
     /* ============ 主卡片样式 ============ */
     .card {
       background: white;
-      border-radius: 20px;
-      padding: 30px;
+      border-radius: clamp(15px, 3vw, 20px);
+      padding: clamp(15px, 4vw, 30px);
       box-shadow: 0 0 40px rgba(255,215,0,0.4), 0 10px 30px rgba(0,0,0,0.2);
       animation: cardBounce 0.6s ease-out, cardGlow 2.5s ease-in-out 0.6s infinite;
-      max-width: 90%;
-      width: 500px;
+      width: min(90vw, 500px);
       position: relative;
       z-index: 10;
     }
@@ -128,16 +127,16 @@
       position: relative;
       border-radius: 50%;
       overflow: hidden;
-      margin: 20px 0;
+      margin: clamp(12px, 3vw, 20px) 0;
       box-shadow: 0 5px 15px rgba(255,107,107,0.3);
     }
 
     .photo-frame img {
-      width: 200px;
-      height: 200px;
+      width: clamp(130px, 35vw, 200px);
+      height: clamp(130px, 35vw, 200px);
       object-fit: cover;
       display: block;
-      border: 5px solid #ff6b6b;
+      border: clamp(3px, 1vw, 5px) solid #ff6b6b;
       border-radius: 50%;
       transition: transform 0.3s;
     }
@@ -166,8 +165,8 @@
     }
 
     h1 {
-      font-size: 2.5rem;
-      margin: 10px 0;
+      font-size: clamp(1.6rem, 5vw, 2.5rem);
+      margin: clamp(6px, 1.5vw, 10px) 0;
       background: linear-gradient(135deg, #ff6b6b, #ffd700, #ff6b6b);
       background-size: 200% 200%;
       -webkit-background-clip: text;
@@ -182,14 +181,14 @@
       50%  { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-    p { font-size: 1.2rem; color: #555; line-height: 1.6; }
+    p { font-size: clamp(0.9rem, 2.5vw, 1.2rem); color: #555; line-height: 1.6; }
 
     /* 装饰分隔线 */
     .divider {
-      margin: 10px 0 5px;
-      font-size: 1rem;
+      margin: clamp(4px, 1.5vw, 10px) 0 clamp(2px, 0.8vw, 5px);
+      font-size: clamp(0.75rem, 1.5vw, 1rem);
       color: #ffb6c1;
-      letter-spacing: 4px;
+      letter-spacing: clamp(2px, 0.6vw, 4px);
       animation: dividerPulse 2s ease-in-out infinite;
     }
 
@@ -201,22 +200,22 @@
 
     .hidden-wish {
       display: none;
-      margin-top: 20px;
-      padding: 15px;
+      margin-top: clamp(12px, 3vw, 20px);
+      padding: clamp(10px, 2vw, 15px);
       background: #fff3cd;
       border-radius: 10px;
       border: 2px dashed #ffc107;
       animation: fadeIn 0.8s ease;
     }
-    @keyframes fadeIn { 
-      from { opacity: 0; transform: translateY(10px); } 
-      to { opacity: 1; transform: translateY(0); } 
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    
+
     .surprise-btn {
-      margin-top: 20px;
-      padding: 12px 30px;
-      font-size: 1.1rem;
+      margin-top: clamp(12px, 3vw, 20px);
+      padding: clamp(10px, 2vw, 12px) clamp(20px, 5vw, 30px);
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
       background: #ff6b6b;
       color: white;
       border: none;
@@ -248,14 +247,14 @@
     
     .music-toggle {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 50px;
-      height: 50px;
+      bottom: clamp(10px, 3vw, 20px);
+      right: clamp(10px, 3vw, 20px);
+      width: clamp(40px, 8vw, 50px);
+      height: clamp(40px, 8vw, 50px);
       border-radius: 50%;
       background: white;
       border: 2px solid #ff6b6b;
-      font-size: 1.5rem;
+      font-size: clamp(1.2rem, 2.5vw, 1.5rem);
       cursor: pointer;
       z-index: 1000;
       display: flex;
@@ -347,7 +346,7 @@
   </div>
 
   <div class="card">
-    <div style="font-size:2rem; margin-bottom:10px;">🎉🎂🎁</div>
+    <div style="font-size:clamp(1.4rem, 3vw, 2rem); margin-bottom:clamp(6px, 1.5vw, 10px);">🎉🎂🎁</div>
     <h1>生日快乐！</h1>
     
     <!-- 使用本地照片 -->
@@ -524,8 +523,10 @@
         playMusic();
       }
       
-      // 平滑滚动到祝福区域
-      wish.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // 平滑滚动到祝福区域（仅大屏幕需要）
+      if (window.innerWidth > 768) {
+        wish.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     });
   </script>
 </body>
