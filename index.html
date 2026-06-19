@@ -99,14 +99,18 @@
 
     /* ============ 主卡片样式 ============ */
     .card {
-      background: white;
+      background:
+        radial-gradient(circle, rgba(255,107,107,0.06) 1px, transparent 1px) 0 0 / 18px 18px,
+        white;
       border-radius: clamp(15px, 3vw, 20px);
       padding: clamp(15px, 4vw, 30px);
+      padding-top: 0;  /* 让顶部渐变条贴边 */
       box-shadow: 0 0 40px rgba(255,215,0,0.4), 0 10px 30px rgba(0,0,0,0.2);
       animation: cardBounce 0.6s ease-out, cardGlow 2.5s ease-in-out 0.6s infinite;
       width: min(90vw, 500px);
       position: relative;
       z-index: 10;
+      overflow: hidden;  /* 让渐变条圆角裁切 */
     }
 
     @keyframes cardGlow {
@@ -120,6 +124,31 @@
       50% { transform: scale(1.05); }
       70% { transform: scale(0.95); }
       100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* 顶部渐变丝带 */
+    .ribbon {
+      width: 100%;
+      height: clamp(4px, 0.8vw, 6px);
+      background: linear-gradient(90deg, #ff6b6b, #ffd700, #ff922b, #ff6b6b);
+      background-size: 200% 200%;
+      animation: ribbonShimmer 3s ease-in-out infinite;
+      border-radius: 0 0 2px 2px;
+    }
+
+    @keyframes ribbonShimmer {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* 照片标签 */
+    .photo-caption {
+      font-size: clamp(0.8rem, 1.8vw, 1rem);
+      color: #ff6b6b;
+      margin-top: clamp(4px, 1vw, 8px);
+      letter-spacing: clamp(2px, 0.5vw, 4px);
+      opacity: 0.75;
     }
 
     .photo-frame {
@@ -346,13 +375,19 @@
   </div>
 
   <div class="card">
-    <div style="font-size:clamp(1.4rem, 3vw, 2rem); margin-bottom:clamp(6px, 1.5vw, 10px);">🎉🎂🎁</div>
+    <!-- 顶部渐变丝带 -->
+    <div class="ribbon"></div>
+
+    <div style="font-size:clamp(1.4rem, 3vw, 2rem); margin-bottom:clamp(6px, 1.5vw, 10px); padding-top:clamp(8px, 2vw, 12px);">🎉🎂🎁</div>
     <h1>生日快乐！</h1>
     
     <!-- 使用本地照片 -->
     <div class="photo-frame">
       <img src="./photo.jpg" alt="寿星" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22200%22%3E%3Crect%20fill%3D%22%23ffb6c1%22%20width%3D%22200%22%20height%3D%22200%22%2F%3E%3Ctext%20fill%3D%22white%22%20font-size%3D%2220%22%20x%3D%2250%22%20y%3D%22110%22%3E🌟%20寿星%20🌟%3C%2Ftext%3E%3C%2Fsvg%3E'">
     </div>
+
+    <!-- 照片标签 -->
+    <div class="photo-caption">🌸 小英 🌸</div>
 
     <!-- 装饰分隔线 -->
     <div class="divider">
