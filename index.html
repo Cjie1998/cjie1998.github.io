@@ -13,7 +13,9 @@
 
     body {
       font-family: 'Comic Sans MS', cursive, sans-serif;
-      background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+      background: linear-gradient(135deg, #ffafbd, #ffc3a0, #ffd1b3, #ffafbd);
+      background-size: 300% 300%;
+      animation: gradientShift 10s ease infinite;
       margin: 0;
       padding: 20px;
       min-height: 100vh;
@@ -23,6 +25,12 @@
       text-align: center;
       overflow: hidden;
       position: relative;
+    }
+
+    @keyframes gradientShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     /* ============ CSS彩带动画 ============ */
@@ -94,12 +102,18 @@
       background: white;
       border-radius: 20px;
       padding: 30px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      box-shadow: 0 0 30px rgba(255,107,107,0.3), 0 10px 30px rgba(0,0,0,0.2);
+      animation: cardBounce 0.6s ease-out, cardGlow 3s ease-in-out 0.6s infinite;
       max-width: 90%;
       width: 500px;
       position: relative;
       z-index: 10;
-      animation: cardBounce 0.6s ease-out;
+    }
+
+    @keyframes cardGlow {
+      0%   { box-shadow: 0 0 30px rgba(255,107,107,0.3), 0 10px 30px rgba(0,0,0,0.2); }
+      50%  { box-shadow: 0 0 50px rgba(255,107,107,0.5), 0 0 80px rgba(255,154,107,0.3), 0 10px 30px rgba(0,0,0,0.2); }
+      100% { box-shadow: 0 0 30px rgba(255,107,107,0.3), 0 10px 30px rgba(0,0,0,0.2); }
     }
 
     @keyframes cardBounce {
@@ -123,11 +137,22 @@
       transform: scale(1.05) rotate(3deg);
     }
 
-    h1 { 
-      color: #ff6b6b; 
-      font-size: 2.5rem; 
+    h1 {
+      font-size: 2.5rem;
       margin: 10px 0;
-      text-shadow: 2px 2px 0 rgba(255,107,107,0.2);
+      background: linear-gradient(135deg, #ff6b6b, #ff922b, #ff6b6b);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: none;
+      animation: titleShine 3s ease-in-out infinite;
+    }
+
+    @keyframes titleShine {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
     p { font-size: 1.2rem; color: #555; line-height: 1.6; }
     
