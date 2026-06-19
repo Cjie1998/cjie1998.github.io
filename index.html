@@ -202,7 +202,7 @@
     <!-- 使用本地照片 -->
     <img src="./photo.jpg" alt="寿星" class="photo" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22200%22%3E%3Crect%20fill%3D%22%23ffb6c1%22%20width%3D%22200%22%20height%3D%22200%22%2F%3E%3Ctext%20fill%3D%22white%22%20font-size%3D%2220%22%20x%3D%2250%22%20y%3D%22110%22%3E🌟%20寿星%20🌟%3C%2Ftext%3E%3C%2Fsvg%3E'">
     
-    <p>亲爱的朋友，<br>愿你新的一岁平安喜乐，梦想成真！<br>感谢一路有你 ❤️</p>
+    <p>亲爱的小英，<br>愿你新的一岁平安喜乐，梦想成真！<br>网络有延迟，我的祝福没有！ ❤️</p>
     
     <button class="surprise-btn" id="surpriseBtn">🎁 点击领取专属祝福</button>
     <div id="hiddenWish" class="hidden-wish">
@@ -259,18 +259,13 @@
       }, 5000);
     }
 
-    // 持续生成彩带
+    // 持续生成彩带（一直不停）
     function startContinuousConfetti() {
       createConfetti();
-      // 每4秒重新生成一波彩带
-      const interval = setInterval(() => {
+      // 每3秒重新生成一波彩带
+      setInterval(() => {
         createConfetti();
-      }, 4000);
-      
-      // 20秒后停止
-      setTimeout(() => {
-        clearInterval(interval);
-      }, 20000);
+      }, 3000);
     }
 
     // ============ 音乐控制 ============
