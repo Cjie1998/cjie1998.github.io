@@ -229,20 +229,20 @@
 
     .float-item {
       position: absolute;
-      font-size: 2.5rem;
-      opacity: 0.35;
-      animation: floatAround 6s ease-in-out infinite;
+      left: var(--x);
+      top: var(--y);
+      font-size: var(--s);
+      opacity: 0.4;
+      animation: floatAround var(--tf) ease-in-out infinite;
+      animation-delay: var(--td);
     }
 
-    /* 每个装饰不同的位置、大小、延迟 */
-    .float-item:nth-child(1) { left: 5%;  top: 10%; font-size: 2rem;  animation-delay: 0s;   animation-duration: 5s; }
-    .float-item:nth-child(2) { left: 85%; top: 15%; font-size: 3rem;  animation-delay: 0.8s; animation-duration: 7s; }
-    .float-item:nth-child(3) { left: 10%; top: 70%; font-size: 2.2rem; animation-delay: 1.5s; animation-duration: 6s; }
-    .float-item:nth-child(4) { left: 80%; top: 75%; font-size: 1.8rem; animation-delay: 2.2s; animation-duration: 5.5s; }
-    .float-item:nth-child(5) { left: 50%; top: 5%;  font-size: 2.8rem; animation-delay: 0.5s; animation-duration: 6.5s; }
-    .float-item:nth-child(6) { left: 92%; top: 45%; font-size: 1.6rem; animation-delay: 3s;   animation-duration: 4.5s; }
-    .float-item:nth-child(7) { left: 3%;  top: 40%; font-size: 2rem;  animation-delay: 1.2s; animation-duration: 5.8s; }
-    .float-item:nth-child(8) { left: 45%; top: 85%; font-size: 2.5rem; animation-delay: 2.8s; animation-duration: 6.2s; }
+    /* 子元素负责忽大忽小的闪烁 */
+    .float-item .twinkle {
+      display: inline-block;
+      animation: twinkle var(--tw) ease-in-out infinite;
+      animation-delay: calc(var(--td) * 0.7);
+    }
 
     @keyframes floatAround {
       0%   { transform: translateY(0)    translateX(0)    rotate(0deg);  }
@@ -250,6 +250,14 @@
       50%  { transform: translateY(-10px) translateX(-8px)  rotate(-3deg); }
       75%  { transform: translateY(-30px) translateX(5px)   rotate(4deg);  }
       100% { transform: translateY(0)    translateX(0)     rotate(0deg);  }
+    }
+
+    @keyframes twinkle {
+      0%   { transform: scale(1);   }
+      25%  { transform: scale(1.3); }
+      50%  { transform: scale(0.8); }
+      75%  { transform: scale(1.25);}
+      100% { transform: scale(1);   }
     }
   </style>
 </head>
@@ -264,14 +272,25 @@
 
   <!-- 🎈 背景漂浮装饰 -->
   <div class="floating-decorations">
-    <span class="float-item">🌸</span>
-    <span class="float-item">💫</span>
-    <span class="float-item">🎈</span>
-    <span class="float-item">✨</span>
-    <span class="float-item">💖</span>
-    <span class="float-item">🌷</span>
-    <span class="float-item">⭐</span>
-    <span class="float-item">💝</span>
+    <span class="float-item" style="--x:3%;  --y:8%;  --s:2rem;   --td:0s;   --tf:5s;  --tw:2.2s"><span class="twinkle">🌸</span></span>
+    <span class="float-item" style="--x:88%; --y:12%; --s:2.8rem; --td:0.7s; --tf:7s;  --tw:2.5s"><span class="twinkle">💫</span></span>
+    <span class="float-item" style="--x:7%;  --y:65%; --s:2.2rem; --td:1.4s; --tf:6s;  --tw:2.0s"><span class="twinkle">🎈</span></span>
+    <span class="float-item" style="--x:82%; --y:78%; --s:1.8rem; --td:2.1s; --tf:5.5s;--tw:2.8s"><span class="twinkle">✨</span></span>
+    <span class="float-item" style="--x:48%; --y:4%;  --s:2.6rem; --td:0.4s; --tf:6.5s;--tw:2.1s"><span class="twinkle">💖</span></span>
+    <span class="float-item" style="--x:94%; --y:42%; --s:1.6rem; --td:2.8s; --tf:4.8s;--tw:2.4s"><span class="twinkle">🌷</span></span>
+    <span class="float-item" style="--x:2%;  --y:38%; --s:2rem;   --td:1.1s; --tf:5.8s;--tw:2.6s"><span class="twinkle">⭐</span></span>
+    <span class="float-item" style="--x:42%; --y:88%; --s:2.4rem; --td:2.5s; --tf:6.2s;--tw:2.3s"><span class="twinkle">💝</span></span>
+
+    <span class="float-item" style="--x:20%; --y:25%; --s:3rem;   --td:0.3s; --tf:6.8s;--tw:2.7s"><span class="twinkle">🎀</span></span>
+    <span class="float-item" style="--x:75%; --y:30%; --s:2.2rem; --td:1.8s; --tf:5.2s;--tw:2.0s"><span class="twinkle">🌸</span></span>
+    <span class="float-item" style="--x:15%; --y:82%; --s:2rem;   --td:0.9s; --tf:6.3s;--tw:2.9s"><span class="twinkle">💫</span></span>
+    <span class="float-item" style="--x:60%; --y:15%; --s:1.8rem; --td:3.1s; --tf:5.7s;--tw:2.2s"><span class="twinkle">🦋</span></span>
+    <span class="float-item" style="--x:55%; --y:70%; --s:2.6rem; --td:1.6s; --tf:6.1s;--tw:2.4s"><span class="twinkle">✨</span></span>
+    <span class="float-item" style="--x:32%; --y:50%; --s:2.4rem; --td:2.3s; --tf:5.4s;--tw:2.6s"><span class="twinkle">🌺</span></span>
+    <span class="float-item" style="--x:68%; --y:55%; --s:2rem;   --td:3.4s; --tf:6.6s;--tw:2.1s"><span class="twinkle">💖</span></span>
+    <span class="float-item" style="--x:90%; --y:65%; --s:1.8rem; --td:0.6s; --tf:5.1s;--tw:2.8s"><span class="twinkle">🎈</span></span>
+    <span class="float-item" style="--x:25%; --y:5%;  --s:2.2rem; --td:2.0s; --tf:6.9s;--tw:2.3s"><span class="twinkle">⭐</span></span>
+    <span class="float-item" style="--x:78%; --y:92%; --s:2.8rem; --td:1.3s; --tf:5.6s;--tw:2.5s"><span class="twinkle">🎀</span></span>
   </div>
 
   <div class="card">
