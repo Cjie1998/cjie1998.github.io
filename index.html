@@ -100,7 +100,9 @@
     /* ============ 主卡片样式 ============ */
     .card {
       background:
-        radial-gradient(circle, rgba(255,107,107,0.13) 1.5px, transparent 1.5px) 0 0 / 15px 15px,
+        radial-gradient(circle, rgba(255,107,107,0.15) 1.2px, transparent 1.2px) 0 0 / 12px 12px,
+        radial-gradient(circle, rgba(255,215,0,0.12) 1px, transparent 1px) 6px 6px / 16px 16px,
+        radial-gradient(circle, rgba(180,130,255,0.10) 1.4px, transparent 1.4px) 4px 8px / 14px 14px,
         white;
       border-radius: clamp(15px, 3vw, 20px);
       padding: clamp(15px, 4vw, 30px);
@@ -227,6 +229,83 @@
       100% { opacity: 0.5; }
     }
 
+    /* ============ 彩带蝴蝶结 ============ */
+    .bow {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 12;
+      pointer-events: none;
+      width: clamp(70px, 14vw, 90px);
+      height: clamp(60px, 12vw, 75px);
+      animation: bowSway 4s ease-in-out infinite;
+    }
+
+    @keyframes bowSway {
+      0%   { transform: translateX(-50%) rotate(0deg); }
+      25%  { transform: translateX(-50%) rotate(3deg); }
+      75%  { transform: translateX(-50%) rotate(-3deg); }
+      100% { transform: translateX(-50%) rotate(0deg); }
+    }
+
+    .bow-loop {
+      position: absolute;
+      border-radius: 45%;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    }
+
+    .bow-loop-l {
+      width: 42%;
+      height: 50%;
+      background: linear-gradient(135deg, #ff6b6b, #ffd700);
+      top: 10%;
+      left: 5%;
+      transform: rotate(-25deg);
+    }
+
+    .bow-loop-r {
+      width: 42%;
+      height: 50%;
+      background: linear-gradient(225deg, #ff6b6b, #ff922b);
+      top: 10%;
+      right: 5%;
+      transform: rotate(25deg);
+    }
+
+    .bow-knot {
+      position: absolute;
+      width: 22%;
+      height: 22%;
+      background: linear-gradient(135deg, #ff5252, #ff6b6b);
+      border-radius: 50%;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+
+    .bow-tail {
+      position: absolute;
+      width: 14%;
+      border-radius: 0 0 50% 50%;
+      top: 40%;
+    }
+
+    .bow-tail-l {
+      height: 55%;
+      background: linear-gradient(180deg, #ff6b6b, #ffd700);
+      left: 30%;
+      transform: rotate(15deg);
+    }
+
+    .bow-tail-r {
+      height: 50%;
+      background: linear-gradient(180deg, #ff922b, #ff6b6b);
+      right: 30%;
+      transform: rotate(-15deg);
+    }
+
     .hidden-wish {
       display: none;
       margin-top: clamp(12px, 3vw, 20px);
@@ -351,6 +430,15 @@
   <!-- 🌈 CSS彩带容器 -->
   <div class="confetti-container" id="confettiContainer"></div>
 
+  <!-- 🎀 彩带蝴蝶结 -->
+  <div class="bow">
+    <span class="bow-loop bow-loop-l"></span>
+    <span class="bow-loop bow-loop-r"></span>
+    <span class="bow-knot"></span>
+    <span class="bow-tail bow-tail-l"></span>
+    <span class="bow-tail bow-tail-r"></span>
+  </div>
+
   <!-- 🎈 背景漂浮装饰 -->
   <div class="floating-decorations">
     <span class="float-item" style="--x:3%;  --y:8%;  --s:2rem;   --td:0s;   --tf:5s;  --tw:2.2s"><span class="twinkle">🌸</span></span>
@@ -372,8 +460,6 @@
     <span class="float-item" style="--x:90%; --y:65%; --s:1.8rem; --td:0.6s; --tf:5.1s;--tw:2.8s"><span class="twinkle">🎈</span></span>
     <span class="float-item" style="--x:25%; --y:5%;  --s:2.2rem; --td:2.0s; --tf:6.9s;--tw:2.3s"><span class="twinkle">⭐</span></span>
     <span class="float-item" style="--x:78%; --y:92%; --s:2.8rem; --td:1.3s; --tf:5.6s;--tw:2.5s"><span class="twinkle">🎀</span></span>
-    <!-- 顶部中央大蝴蝶结 -->
-    <span class="float-item" style="--x:42%; --y:-2%; --s:3.5rem; --td:0s; --tf:7s; --tw:2s; opacity:0.55;"><span class="twinkle">🎀</span></span>
   </div>
 
   <div class="card">
