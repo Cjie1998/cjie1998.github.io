@@ -216,7 +216,7 @@
   </div>
 
   <!-- 音乐开关按钮 -->
-  <button class="music-toggle" id="musicBtn">🔇</button>
+  <button class="music-toggle" id="musicBtn">🔊</button>
 
   <script>
     // ============ 彩色纸片生成器 ============
@@ -276,7 +276,7 @@
     // ============ 音乐控制 ============
     const bgm = document.getElementById('bgm');
     const musicBtn = document.getElementById('musicBtn');
-    let musicPlaying = false;
+    let musicPlaying = true;
 
     function updateMusicIcon() {
       musicBtn.textContent = musicPlaying ? '🔊' : '🔇';
