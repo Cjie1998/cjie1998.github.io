@@ -100,19 +100,25 @@
     /* ============ 主卡片样式 ============ */
     .card {
       background:
-        radial-gradient(circle, rgba(255,107,107,0.15) 1.2px, transparent 1.2px) 0 0 / 12px 12px,
-        radial-gradient(circle, rgba(255,215,0,0.12) 1px, transparent 1px) 6px 6px / 16px 16px,
-        radial-gradient(circle, rgba(180,130,255,0.10) 1.4px, transparent 1.4px) 4px 8px / 14px 14px,
+        radial-gradient(circle, rgba(255,107,107,0.25) 1.8px, transparent 1.8px) 0 0 / 14px 14px,
+        radial-gradient(circle, rgba(255,215,0,0.22) 1.5px, transparent 1.5px) 7px 7px / 18px 18px,
+        radial-gradient(circle, rgba(180,130,255,0.20) 1.6px, transparent 1.6px) 5px 10px / 16px 16px,
         white;
+      background-position: 0px 0px, 7px 7px, 5px 10px;
+      animation: cardBounce 0.6s ease-out, cardGlow 2.5s ease-in-out 0.6s infinite, textureDrift 12s linear infinite;
       border-radius: clamp(15px, 3vw, 20px);
       padding: clamp(15px, 4vw, 30px);
-      padding-top: 0;  /* 让顶部渐变条贴边 */
+      padding-top: 0;
       box-shadow: 0 0 40px rgba(255,215,0,0.4), 0 10px 30px rgba(0,0,0,0.2);
-      animation: cardBounce 0.6s ease-out, cardGlow 2.5s ease-in-out 0.6s infinite;
       width: min(90vw, 500px);
       position: relative;
       z-index: 10;
-      overflow: hidden;  /* 让渐变条圆角裁切 */
+    }
+
+    @keyframes textureDrift {
+      0%   { background-position: 0px 0px, 7px 7px, 5px 10px; }
+      50%  { background-position: 7px 3px, 0px 0px, 12px 5px; }
+      100% { background-position: 0px 0px, 7px 7px, 5px 10px; }
     }
 
     @keyframes cardGlow {
@@ -131,11 +137,11 @@
     /* 顶部渐变丝带 */
     .ribbon {
       width: 100%;
-      height: clamp(4px, 0.8vw, 6px);
+      height: clamp(5px, 1vw, 8px);
       background: linear-gradient(90deg, #ff6b6b, #ffd700, #ff922b, #ff6b6b);
       background-size: 200% 200%;
       animation: ribbonShimmer 3s ease-in-out infinite;
-      border-radius: 0 0 2px 2px;
+      border-radius: clamp(12px, 2.5vw, 18px) clamp(12px, 2.5vw, 18px) 0 0;
     }
 
     @keyframes ribbonShimmer {
@@ -231,11 +237,11 @@
 
     /* ============ 彩带蝴蝶结 ============ */
     .bow {
-      position: fixed;
+      position: absolute;
       top: 0;
       left: 50%;
-      transform: translateX(-50%);
-      z-index: 12;
+      transform: translate(-50%, -55%);
+      z-index: 2;
       pointer-events: none;
       width: clamp(70px, 14vw, 90px);
       height: clamp(60px, 12vw, 75px);
@@ -243,10 +249,10 @@
     }
 
     @keyframes bowSway {
-      0%   { transform: translateX(-50%) rotate(0deg); }
-      25%  { transform: translateX(-50%) rotate(3deg); }
-      75%  { transform: translateX(-50%) rotate(-3deg); }
-      100% { transform: translateX(-50%) rotate(0deg); }
+      0%   { transform: translate(-50%, -55%) rotate(0deg); }
+      25%  { transform: translate(-50%, -55%) rotate(3deg); }
+      75%  { transform: translate(-50%, -55%) rotate(-3deg); }
+      100% { transform: translate(-50%, -55%) rotate(0deg); }
     }
 
     .bow-loop {
@@ -430,15 +436,6 @@
   <!-- 🌈 CSS彩带容器 -->
   <div class="confetti-container" id="confettiContainer"></div>
 
-  <!-- 🎀 彩带蝴蝶结 -->
-  <div class="bow">
-    <span class="bow-loop bow-loop-l"></span>
-    <span class="bow-loop bow-loop-r"></span>
-    <span class="bow-knot"></span>
-    <span class="bow-tail bow-tail-l"></span>
-    <span class="bow-tail bow-tail-r"></span>
-  </div>
-
   <!-- 🎈 背景漂浮装饰 -->
   <div class="floating-decorations">
     <span class="float-item" style="--x:3%;  --y:8%;  --s:2rem;   --td:0s;   --tf:5s;  --tw:2.2s"><span class="twinkle">🌸</span></span>
@@ -466,7 +463,16 @@
     <!-- 顶部渐变丝带 -->
     <div class="ribbon"></div>
 
-    <div style="font-size:clamp(1.4rem, 3vw, 2rem); margin-bottom:clamp(6px, 1.5vw, 10px); padding-top:clamp(8px, 2vw, 12px);">🎉🎂🎁</div>
+    <!-- 🎀 蝴蝶结（坐在丝带上） -->
+    <div class="bow">
+      <span class="bow-loop bow-loop-l"></span>
+      <span class="bow-loop bow-loop-r"></span>
+      <span class="bow-knot"></span>
+      <span class="bow-tail bow-tail-l"></span>
+      <span class="bow-tail bow-tail-r"></span>
+    </div>
+
+    <div style="font-size:clamp(1.4rem, 3vw, 2rem); margin-bottom:clamp(6px, 1.5vw, 10px); padding-top:clamp(28px, 7vw, 40px);">🎉🎂🎁</div>
     <h1>生日快乐！</h1>
     
     <!-- 使用本地照片 -->
