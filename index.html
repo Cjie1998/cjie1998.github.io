@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-build="1.0.1">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>干支合战</title>
   <meta name="description" content="干支合战 · 月令合局：月令轮换、同时暗出、合局化五行的 1v1 策略卡牌游戏。">
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./styles.css?v=1.0.1">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%230b0f14'/><text x='32' y='45' font-size='34' text-anchor='middle' fill='%23d7b25c' font-family='serif'>合</text></svg>">
 </head>
 <body>
@@ -445,6 +448,20 @@
     <div class="overlay-card" id="overlay-card"></div>
   </div>
 
-  <script type="module" src="./src/main.js"></script>
+  <script type="module" src="./src/main.js?v=1.0.1"></script>
+  <script>
+    fetch('./version.json?ts=' + Date.now(), { cache: 'no-store' })
+      .then((r) => r.json())
+      .then((v) => {
+        const current = document.documentElement.dataset.build;
+        const urlBuild = new URL(location.href).searchParams.get('v');
+        if (v.build && current && v.build !== current && urlBuild !== v.build) {
+          const url = new URL(location.href);
+          url.searchParams.set('v', v.build);
+          location.replace(url);
+        }
+      })
+      .catch(() => {});
+  </script>
 </body>
 </html>
