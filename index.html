@@ -1,662 +1,450 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🎂 生日快乐！</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      background: linear-gradient(135deg, #ffafbd, #ffc3a0, #d4a5ff, #ffecd2, #ffafbd, #fcb69f);
-      background-size: 400% 400%;
-      animation: gradientShift 8s ease infinite;
-      margin: 0;
-      padding: clamp(8px, 3vw, 20px);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      overflow: hidden;
-      position: relative;
-    }
-
-    @keyframes gradientShift {
-      0%   { background-position: 0% 50%; }
-      50%  { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    /* ============ CSS彩带动画 ============ */
-    .confetti-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 999;
-    }
-
-    .confetti-piece {
-      position: absolute;
-      width: 12px;
-      height: 12px;
-      top: -30px;
-      animation: confettiFall linear forwards;
-    }
-
-    @keyframes confettiFall {
-      0% {
-        transform: translateY(0) translateX(0) rotate(0deg);
-        opacity: 1;
-      }
-      10% {
-        opacity: 1;
-      }
-      25% {
-        transform: translateY(25vh) translateX(30px) rotate(120deg);
-        opacity: 0.9;
-      }
-      50% {
-        transform: translateY(50vh) translateX(-20px) rotate(240deg);
-        opacity: 0.75;
-      }
-      75% {
-        transform: translateY(75vh) translateX(25px) rotate(320deg);
-        opacity: 0.5;
-      }
-      90% {
-        opacity: 0.2;
-      }
-      100% {
-        transform: translateY(105vh) translateX(-15px) rotate(400deg);
-        opacity: 0;
-      }
-    }
-
-    /* 不同形状的彩带 */
-    .confetti-piece.circle {
-      border-radius: 50%;
-    }
-    .confetti-piece.square {
-      border-radius: 2px;
-    }
-    .confetti-piece.triangle {
-      width: 0;
-      height: 0;
-      background: transparent !important;
-      border-left: 6px solid transparent;
-      border-right: 6px solid transparent;
-      border-bottom: 12px solid;
-    }
-
-    /* ============ 主卡片样式 ============ */
-    .card {
-      background:
-        radial-gradient(circle, rgba(255,107,107,0.25) 1.8px, transparent 1.8px) 0 0 / 14px 14px,
-        radial-gradient(circle, rgba(255,215,0,0.22) 1.5px, transparent 1.5px) 7px 7px / 18px 18px,
-        radial-gradient(circle, rgba(180,130,255,0.20) 1.6px, transparent 1.6px) 5px 10px / 16px 16px,
-        white;
-      background-position: 0px 0px, 7px 7px, 5px 10px;
-      animation: cardBounce 0.6s ease-out, cardGlow 2.5s ease-in-out 0.6s infinite, textureDrift 12s linear infinite;
-      border-radius: clamp(15px, 3vw, 20px);
-      padding: clamp(15px, 4vw, 30px);
-      padding-top: 0;
-      box-shadow: 0 0 40px rgba(255,215,0,0.4), 0 10px 30px rgba(0,0,0,0.2);
-      width: min(90vw, 500px);
-      position: relative;
-      z-index: 10;
-    }
-
-    @keyframes textureDrift {
-      0%   { background-position: 0px 0px, 7px 7px, 5px 10px; }
-      50%  { background-position: 7px 3px, 0px 0px, 12px 5px; }
-      100% { background-position: 0px 0px, 7px 7px, 5px 10px; }
-    }
-
-    @keyframes cardGlow {
-      0%   { box-shadow: 0 0 40px rgba(255,215,0,0.4), 0 10px 30px rgba(0,0,0,0.2); }
-      50%  { box-shadow: 0 0 70px rgba(255,215,0,0.7), 0 0 100px rgba(255,180,0,0.4), 0 10px 30px rgba(0,0,0,0.2); }
-      100% { box-shadow: 0 0 40px rgba(255,215,0,0.4), 0 10px 30px rgba(0,0,0,0.2); }
-    }
-
-    @keyframes cardBounce {
-      0% { transform: scale(0.3); opacity: 0; }
-      50% { transform: scale(1.05); }
-      70% { transform: scale(0.95); }
-      100% { transform: scale(1); opacity: 1; }
-    }
-
-    /* 顶部渐变丝带 */
-    .ribbon {
-      width: 100%;
-      height: clamp(5px, 1vw, 8px);
-      background: linear-gradient(90deg, #ff6b6b, #ffd700, #ff922b, #ff6b6b);
-      background-size: 200% 200%;
-      animation: ribbonShimmer 3s ease-in-out infinite;
-      border-radius: clamp(12px, 2.5vw, 18px) clamp(12px, 2.5vw, 18px) 0 0;
-    }
-
-    @keyframes ribbonShimmer {
-      0%   { background-position: 0% 50%; }
-      50%  { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    /* 照片标签 */
-    .photo-caption {
-      font-size: clamp(0.8rem, 1.8vw, 1rem);
-      color: #ff6b6b;
-      margin-top: clamp(4px, 1vw, 8px);
-      letter-spacing: clamp(2px, 0.5vw, 4px);
-      opacity: 0.75;
-    }
-
-    .photo-frame {
-      display: inline-block;
-      position: relative;
-      border-radius: 50%;
-      overflow: hidden;
-      margin: clamp(12px, 3vw, 20px) 0;
-      box-shadow: 0 5px 15px rgba(255,107,107,0.3);
-    }
-
-    .photo-frame img {
-      width: clamp(130px, 35vw, 200px);
-      height: clamp(130px, 35vw, 200px);
-      object-fit: cover;
-      display: block;
-      border: clamp(3px, 1vw, 5px) solid #ff6b6b;
-      border-radius: 50%;
-      transition: transform 0.3s;
-    }
-
-    .photo-frame:hover img {
-      transform: scale(1.05) rotate(3deg);
-    }
-
-    /* 照片光泽划过 */
-    .photo-frame::after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -100%;
-      width: 40%;
-      height: 200%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
-      transform: skewX(-20deg);
-      animation: photoShine 3.5s ease-in-out infinite;
-    }
-
-    @keyframes photoShine {
-      0%   { left: -100%; }
-      40%  { left: 160%; }
-      100% { left: 160%; }
-    }
-
-    h1 {
-      font-size: clamp(1.6rem, 5vw, 2.5rem);
-      margin: clamp(6px, 1.5vw, 10px) 0;
-      background: linear-gradient(135deg, #ff6b6b, #ffd700, #ff6b6b);
-      background-size: 200% 200%;
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: none;
-      animation: titleShine 2.5s ease-in-out infinite;
-    }
-
-    @keyframes titleShine {
-      0%   { background-position: 0% 50%; }
-      50%  { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    p { font-size: clamp(0.9rem, 2.5vw, 1.2rem); color: #555; line-height: 1.6; }
-
-    /* 装饰分隔线 */
-    .divider {
-      margin: clamp(4px, 1.5vw, 10px) 0 clamp(2px, 0.8vw, 5px);
-      font-size: clamp(0.75rem, 1.5vw, 1rem);
-      color: #ffb6c1;
-      letter-spacing: clamp(2px, 0.6vw, 4px);
-      animation: dividerPulse 2s ease-in-out infinite;
-    }
-
-    @keyframes dividerPulse {
-      0%   { opacity: 0.5; }
-      50%  { opacity: 1; }
-      100% { opacity: 0.5; }
-    }
-
-    /* ============ 彩带蝴蝶结 ============ */
-    .bow {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translate(-50%, -55%);
-      z-index: 2;
-      pointer-events: none;
-      width: clamp(70px, 14vw, 90px);
-      height: clamp(60px, 12vw, 75px);
-      animation: bowSway 4s ease-in-out infinite;
-    }
-
-    @keyframes bowSway {
-      0%   { transform: translate(-50%, -55%) rotate(0deg); }
-      25%  { transform: translate(-50%, -55%) rotate(3deg); }
-      75%  { transform: translate(-50%, -55%) rotate(-3deg); }
-      100% { transform: translate(-50%, -55%) rotate(0deg); }
-    }
-
-    .bow-loop {
-      position: absolute;
-      border-radius: 45%;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
-    }
-
-    .bow-loop-l {
-      width: 42%;
-      height: 50%;
-      background: linear-gradient(135deg, #ff6b6b, #ffd700);
-      top: 10%;
-      left: 5%;
-      transform: rotate(-25deg);
-    }
-
-    .bow-loop-r {
-      width: 42%;
-      height: 50%;
-      background: linear-gradient(225deg, #ff6b6b, #ff922b);
-      top: 10%;
-      right: 5%;
-      transform: rotate(25deg);
-    }
-
-    .bow-knot {
-      position: absolute;
-      width: 22%;
-      height: 22%;
-      background: linear-gradient(135deg, #ff5252, #ff6b6b);
-      border-radius: 50%;
-      top: 30%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-    }
-
-    .bow-tail {
-      position: absolute;
-      width: 14%;
-      border-radius: 0 0 50% 50%;
-      top: 40%;
-    }
-
-    .bow-tail-l {
-      height: 55%;
-      background: linear-gradient(180deg, #ff6b6b, #ffd700);
-      left: 30%;
-      transform: rotate(15deg);
-    }
-
-    .bow-tail-r {
-      height: 50%;
-      background: linear-gradient(180deg, #ff922b, #ff6b6b);
-      right: 30%;
-      transform: rotate(-15deg);
-    }
-
-    .hidden-wish {
-      display: none;
-      margin-top: clamp(12px, 3vw, 20px);
-      padding: clamp(10px, 2vw, 15px);
-      background: #fff3cd;
-      border-radius: 10px;
-      border: 2px dashed #ffc107;
-      animation: fadeIn 0.8s ease;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .surprise-btn {
-      margin-top: clamp(12px, 3vw, 20px);
-      padding: clamp(10px, 2vw, 12px) clamp(20px, 5vw, 30px);
-      font-size: clamp(0.9rem, 2vw, 1.1rem);
-      background: #ff6b6b;
-      color: white;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      box-shadow: 0 4px 15px rgba(255,107,107,0.4);
-      position: relative;
-      overflow: hidden;
-      animation: heartbeat 1.8s ease-in-out infinite;
-    }
-    .surprise-btn:hover {
-      transform: scale(1.05);
-      background: #ff5252;
-      box-shadow: 0 6px 20px rgba(255,107,107,0.6);
-      animation: none;
-    }
-    .surprise-btn:active {
-      transform: scale(0.95);
-    }
-
-    @keyframes heartbeat {
-      0%   { transform: scale(1); }
-      8%   { transform: scale(1.08); }
-      16%  { transform: scale(1); }
-      24%  { transform: scale(1.05); }
-      32%  { transform: scale(1); }
-      100% { transform: scale(1); }
-    }
-    
-    .music-toggle {
-      position: fixed;
-      bottom: clamp(10px, 3vw, 20px);
-      right: clamp(10px, 3vw, 20px);
-      width: clamp(40px, 8vw, 50px);
-      height: clamp(40px, 8vw, 50px);
-      border-radius: 50%;
-      background: white;
-      border: 2px solid #ff6b6b;
-      font-size: clamp(1.2rem, 2.5vw, 1.5rem);
-      cursor: pointer;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      transition: all 0.3s;
-    }
-    .music-toggle:hover {
-      transform: scale(1.1);
-      background: #fff5f5;
-    }
-
-    /* ============ 背景漂浮装饰 ============ */
-    .floating-decorations {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 5;
-    }
-
-    .float-item {
-      position: absolute;
-      left: var(--x);
-      top: var(--y);
-      font-size: var(--s);
-      opacity: 0.4;
-      animation: floatAround var(--tf) ease-in-out infinite;
-      animation-delay: var(--td);
-    }
-
-    /* 子元素负责忽大忽小的闪烁 */
-    .float-item .twinkle {
-      display: inline-block;
-      animation: twinkle var(--tw) ease-in-out infinite;
-      animation-delay: calc(var(--td) * 0.7);
-    }
-
-    @keyframes floatAround {
-      0%   { transform: translateY(0)    translateX(0)    rotate(0deg);  }
-      25%  { transform: translateY(-25px) translateX(10px)  rotate(5deg);  }
-      50%  { transform: translateY(-10px) translateX(-8px)  rotate(-3deg); }
-      75%  { transform: translateY(-30px) translateX(5px)   rotate(4deg);  }
-      100% { transform: translateY(0)    translateX(0)     rotate(0deg);  }
-    }
-
-    @keyframes twinkle {
-      0%   { transform: scale(1);   }
-      25%  { transform: scale(1.3); }
-      50%  { transform: scale(0.8); }
-      75%  { transform: scale(1.25);}
-      100% { transform: scale(1);   }
-    }
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>天干地支 · 五行合局</title>
+  <meta name="description" content="月令轮换、同时暗出、合局化五行的 1v1 策略卡牌游戏。">
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%230b0f14'/><text x='32' y='45' font-size='34' text-anchor='middle' fill='%23d7b25c' font-family='serif'>五</text></svg>">
 </head>
 <body>
-  <!-- 🎵 背景音乐 -->
-  <audio id="bgm" loop preload="auto">
-    <source src="./birthday.mp3" type="audio/mpeg">
-  </audio>
+  <section class="landing" id="landing" aria-label="月令合局大厅">
+    <header class="landing-top">
+      <div class="brand">
+        <div class="brand-seal" aria-hidden="true">干支</div>
+        <div class="brand-text">
+          <h1>天干地支 <i>·</i> 五行合局</h1>
+          <p>月令轮换 · 同时暗出 · 合局相克</p>
+        </div>
+      </div>
+    </header>
 
-  <!-- 🌈 CSS彩带容器 -->
-  <div class="confetti-container" id="confettiContainer"></div>
+    <main class="landing-main">
+      <div class="landing-copy">
+        <p class="landing-eyebrow">天干地支 · 单人模式</p>
+        <div class="landing-title-row">
+          <span class="landing-seal" aria-hidden="true">令</span>
+          <h1>月令合局</h1>
+        </div>
+        <p class="landing-lead">十二回合，月令为局。<br>双暗出，合五行。</p>
+        <p class="landing-desc">以月令为纲，收集天干地支，在正确的旺月合出五行牌。看穿对手的暗牌，赢下十二回合。</p>
 
-  <!-- 🎈 背景漂浮装饰 -->
-  <div class="floating-decorations">
-    <span class="float-item" style="--x:3%;  --y:8%;  --s:2rem;   --td:0s;   --tf:5s;  --tw:2.2s"><span class="twinkle">🌸</span></span>
-    <span class="float-item" style="--x:88%; --y:12%; --s:2.8rem; --td:0.7s; --tf:7s;  --tw:2.5s"><span class="twinkle">💫</span></span>
-    <span class="float-item" style="--x:7%;  --y:65%; --s:2.2rem; --td:1.4s; --tf:6s;  --tw:2.0s"><span class="twinkle">🎈</span></span>
-    <span class="float-item" style="--x:82%; --y:78%; --s:1.8rem; --td:2.1s; --tf:5.5s;--tw:2.8s"><span class="twinkle">✨</span></span>
-    <span class="float-item" style="--x:48%; --y:4%;  --s:2.6rem; --td:0.4s; --tf:6.5s;--tw:2.1s"><span class="twinkle">💖</span></span>
-    <span class="float-item" style="--x:94%; --y:42%; --s:1.6rem; --td:2.8s; --tf:4.8s;--tw:2.4s"><span class="twinkle">🌷</span></span>
-    <span class="float-item" style="--x:2%;  --y:38%; --s:2rem;   --td:1.1s; --tf:5.8s;--tw:2.6s"><span class="twinkle">⭐</span></span>
-    <span class="float-item" style="--x:42%; --y:88%; --s:2.4rem; --td:2.5s; --tf:6.2s;--tw:2.3s"><span class="twinkle">💝</span></span>
+        <div class="landing-tags" aria-label="模式特性">
+          <span>12 回合</span>
+          <span>月令轮换</span>
+          <span>暗牌同出</span>
+          <span>五行合局</span>
+        </div>
 
-    <span class="float-item" style="--x:20%; --y:25%; --s:3rem;   --td:0.3s; --tf:6.8s;--tw:2.7s"><span class="twinkle">🎀</span></span>
-    <span class="float-item" style="--x:75%; --y:30%; --s:2.2rem; --td:1.8s; --tf:5.2s;--tw:2.0s"><span class="twinkle">🌸</span></span>
-    <span class="float-item" style="--x:15%; --y:82%; --s:2rem;   --td:0.9s; --tf:6.3s;--tw:2.9s"><span class="twinkle">💫</span></span>
-    <span class="float-item" style="--x:60%; --y:15%; --s:1.8rem; --td:3.1s; --tf:5.7s;--tw:2.2s"><span class="twinkle">🦋</span></span>
-    <span class="float-item" style="--x:55%; --y:70%; --s:2.6rem; --td:1.6s; --tf:6.1s;--tw:2.4s"><span class="twinkle">✨</span></span>
-    <span class="float-item" style="--x:32%; --y:50%; --s:2.4rem; --td:2.3s; --tf:5.4s;--tw:2.6s"><span class="twinkle">🌺</span></span>
-    <span class="float-item" style="--x:68%; --y:55%; --s:2rem;   --td:3.4s; --tf:6.6s;--tw:2.1s"><span class="twinkle">💖</span></span>
-    <span class="float-item" style="--x:90%; --y:65%; --s:1.8rem; --td:0.6s; --tf:5.1s;--tw:2.8s"><span class="twinkle">🎈</span></span>
-    <span class="float-item" style="--x:25%; --y:5%;  --s:2.2rem; --td:2.0s; --tf:6.9s;--tw:2.3s"><span class="twinkle">⭐</span></span>
-    <span class="float-item" style="--x:78%; --y:92%; --s:2.8rem; --td:1.3s; --tf:5.6s;--tw:2.5s"><span class="twinkle">🎀</span></span>
+        <div class="landing-actions">
+          <button class="btn primary landing-start" id="start-game" type="button">
+            进入月令合局 <span class="landing-arrow">→</span>
+          </button>
+          <span class="landing-mode-note">单人 · 对战电脑</span>
+        </div>
+      </div>
+
+      <div class="landing-orbit" aria-hidden="true">
+        <div class="landing-wheel">
+          <span class="landing-branch" style="--i:0">子</span>
+          <span class="landing-branch" style="--i:1">丑</span>
+          <span class="landing-branch" style="--i:2">寅</span>
+          <span class="landing-branch" style="--i:3">卯</span>
+          <span class="landing-branch" style="--i:4">辰</span>
+          <span class="landing-branch" style="--i:5">巳</span>
+          <span class="landing-branch" style="--i:6">午</span>
+          <span class="landing-branch" style="--i:7">未</span>
+          <span class="landing-branch" style="--i:8">申</span>
+          <span class="landing-branch" style="--i:9">酉</span>
+          <span class="landing-branch" style="--i:10">戌</span>
+          <span class="landing-branch" style="--i:11">亥</span>
+          <i class="landing-needle"></i>
+          <div class="landing-wheel-center">
+            <b>月令</b>
+            <span>合局</span>
+          </div>
+        </div>
+        <div class="landing-orbit-caption">以月为令 · 以局破局</div>
+      </div>
+    </main>
+
+    <footer class="landing-foot">
+      <span>单机试玩 · 进度仅存本机</span>
+      <span>v4.4</span>
+    </footer>
+  </section>
+
+  <section class="spin-stage" id="spin-stage" aria-label="开局定月" hidden>
+    <header class="spin-top">
+      <div class="brand">
+        <div class="brand-seal" aria-hidden="true">干支</div>
+        <div class="brand-text">
+          <h1>天干地支 <i>·</i> 五行合局</h1>
+          <p>月令轮换 · 同时暗出 · 合局相克</p>
+        </div>
+      </div>
+      <span class="spin-step">开局 · 定月</span>
+    </header>
+
+    <main class="spin-main">
+      <aside class="spin-side spin-side-p">
+        <span class="spin-who">你</span>
+        <div class="spin-result" id="spin-result-p"><b>—</b><small>拨动月盘</small></div>
+        <span class="spin-role">先手拨月</span>
+      </aside>
+
+      <div class="spin-core">
+        <div class="spin-turn" id="spin-turn">轮到你拨动月盘</div>
+        <div class="spin-wheel-shell">
+          <i class="spin-pointer" aria-hidden="true"></i>
+          <div class="spin-wheel" id="spin-wheel" role="slider" tabindex="0" aria-label="月令转盘，拖动后松手"></div>
+          <div class="spin-hub"><b>月令</b><span>十二支</span></div>
+          <div class="spin-agent" id="spin-agent"><i></i><span>你</span></div>
+        </div>
+        <p class="spin-hint" id="spin-hint">按住轮盘拖动上弦 · 松手开始旋转</p>
+      </div>
+
+      <aside class="spin-side spin-side-a">
+        <span class="spin-who">电脑</span>
+        <div class="spin-result" id="spin-result-a"><b>—</b><small>等待拨动</small></div>
+        <span class="spin-role">后手拨月</span>
+      </aside>
+    </main>
+
+    <div class="spin-verdict" id="spin-verdict" hidden>
+      <span class="spin-verdict-label">天择</span>
+      <div class="spin-verdict-main">
+        <b id="spin-chosen">—</b>
+        <span id="spin-direction">—</span>
+      </div>
+      <button class="btn primary spin-enter" id="spin-enter" type="button">以此月入局 →</button>
+    </div>
+
+    <footer class="spin-foot">
+      <span>双方各拨一次 · 随机取一 · 随机顺逆</span>
+      <span>月令合局</span>
+    </footer>
+  </section>
+
+  <div class="app" id="app" hidden>
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-seal" aria-hidden="true">干支</div>
+        <div class="brand-text">
+          <h1>天干地支 <i>·</i> 五行合局</h1>
+          <p>月令轮换 · 同时暗出 · 合局相克</p>
+        </div>
+      </div>
+
+      <div class="month-card" id="month-card" aria-live="polite"></div>
+
+      <div class="scoreboard" id="scoreboard" aria-live="polite"></div>
+
+      <div class="top-actions">
+        <label class="time-select" title="仅影响本机试玩">
+          回合时限
+          <select id="timer-select">
+            <option value="60">60 秒</option>
+            <option value="30">30 秒</option>
+            <option value="15">15 秒</option>
+            <option value="0">不限时</option>
+          </select>
+        </label>
+        <button class="btn tiny ghost" id="rules-btn" type="button">教程</button>
+        <button class="btn tiny ghost" id="restart-btn" type="button">重开</button>
+      </div>
+    </header>
+
+    <main class="board">
+      <section class="table" aria-label="对局桌面">
+        <div class="opponent-row">
+          <div class="row-label">
+            <span class="who">对手 · 电脑</span>
+            <span class="count" id="ai-count" title="张数可由公开的摸牌、出牌、弃牌推算">—</span>
+          </div>
+          <div class="opp-hand" id="ai-hand" aria-label="对手手牌背面"></div>
+        </div>
+
+        <div class="center-stage">
+          <div class="stage-mark" id="stage-mark" aria-hidden="true"></div>
+          <div class="phase-clock" id="phase-clock" aria-label="出牌阶段倒计时">
+            <svg viewBox="0 0 80 80" aria-hidden="true">
+              <circle class="ring-bg" cx="40" cy="40" r="34"></circle>
+              <circle class="ring-fg" id="phase-ring" cx="40" cy="40" r="34"></circle>
+            </svg>
+            <span id="phase-label">出牌</span>
+          </div>
+          <div class="phase-banner" id="phase-banner"></div>
+          <div class="duel" id="duel"></div>
+          <div class="draw-pool" id="draw-pool" hidden></div>
+          <div class="round-summary" id="round-summary"></div>
+        </div>
+
+        <div class="self-row">
+          <div class="row-label">
+            <span class="who">你</span>
+            <span class="count" id="p-count">8 / 10 张</span>
+            <span class="legend" id="hint-legend"><i class="legend-dot"></i>副色 = 可合化五行</span>
+          </div>
+          <div class="hand" id="p-hand" aria-label="你的手牌"></div>
+        </div>
+      </section>
+
+      <aside class="sidebar">
+        <section class="panel month-panel">
+          <div class="panel-head">
+            <h2>月令轮盘</h2>
+            <span class="panel-note" id="month-next"></span>
+          </div>
+          <div class="month-wheel" id="month-wheel" aria-label="十二个月令轮盘"></div>
+          <div class="wheel-caption" id="wheel-caption"></div>
+          <div class="wheel-legend">
+            <span><i class="wheel-dot passed"></i>已过</span>
+            <span><i class="wheel-dot current"></i>当前</span>
+            <span><i class="wheel-dot future"></i>未至</span>
+          </div>
+          <div class="fortune-list" id="fortune-list"></div>
+          <p class="panel-foot">单牌分 = 5 + 2×旺相 · 月令支单牌固定 10</p>
+        </section>
+
+      </aside>
+    </main>
+
+    <footer class="actionbar">
+      <div class="selection-info" id="selection-info" aria-live="polite"></div>
+      <div class="action-buttons" id="actions"></div>
+    </footer>
   </div>
 
-  <div class="card">
-    <!-- 顶部渐变丝带 -->
-    <div class="ribbon"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="battle-flash" id="battle-flash" aria-hidden="true"></div>
 
-    <!-- 🎀 蝴蝶结（坐在丝带上） -->
-    <div class="bow">
-      <span class="bow-loop bow-loop-l"></span>
-      <span class="bow-loop bow-loop-r"></span>
-      <span class="bow-knot"></span>
-      <span class="bow-tail bow-tail-l"></span>
-      <span class="bow-tail bow-tail-r"></span>
+  <dialog id="rules-dialog" class="rules-dialog tutorial-dialog">
+    <div class="rules-head tutorial-head">
+      <div class="tutorial-heading">
+        <span class="tutorial-eyebrow">月令合局 · 入局教程</span>
+        <h2 id="tutorial-title">五行生克制化</h2>
+      </div>
+      <button class="btn tiny ghost" id="rules-close" type="button">跳过教程</button>
     </div>
 
-    <div style="font-size:clamp(1.4rem, 3vw, 2rem); margin-bottom:clamp(6px, 1.5vw, 10px); padding-top:clamp(28px, 7vw, 40px);">🎉🎂🎁</div>
-    <h1>生日快乐！</h1>
-    
-    <!-- 使用本地照片 -->
-    <div class="photo-frame">
-      <img src="./photo.jpg" alt="寿星" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22200%22%3E%3Crect%20fill%3D%22%23ffb6c1%22%20width%3D%22200%22%20height%3D%22200%22%2F%3E%3Ctext%20fill%3D%22white%22%20font-size%3D%2220%22%20x%3D%2250%22%20y%3D%22110%22%3E🌟%20寿星%20🌟%3C%2Ftext%3E%3C%2Fsvg%3E'">
+    <div class="tutorial-progress" id="tutorial-progress" aria-label="教程步骤"></div>
+
+    <div class="rules-body tutorial-body" id="tutorial-body">
+      <section class="tutorial-step" data-step="0">
+        <p class="tutorial-lead">五行不是五个孤立的标签，而是一张相生、相克、互相制化的关系网。理解这张网，才能判断什么时候该合、合出什么。</p>
+        <div class="tutorial-cycle-wrap">
+          <div class="tutorial-cycle" aria-hidden="true">
+            <span class="cycle-node" data-el="木" style="--i:0">木</span>
+            <span class="cycle-node" data-el="火" style="--i:1">火</span>
+            <span class="cycle-node" data-el="土" style="--i:2">土</span>
+            <span class="cycle-node" data-el="金" style="--i:3">金</span>
+            <span class="cycle-node" data-el="水" style="--i:4">水</span>
+            <div class="cycle-center">生<br><i>克</i></div>
+          </div>
+          <div class="tutorial-cycle-copy">
+            <div><b>相生</b><span>木生火 · 火生土 · 土生金 · 金生水 · 水生木</span></div>
+            <div><b>相克</b><span>木克土 · 土克水 · 水克火 · 火克金 · 金克木</span></div>
+            <div><b>制化</b><span>生中有克、克中有生；旺者被泄，弱者得生，局面随月令变化。</span></div>
+          </div>
+        </div>
+        <div class="tutorial-note">月令五行决定谁当令。当令者旺，令生者相，生令者休，克令者囚，令克者死。</div>
+      </section>
+
+      <section class="tutorial-step" data-step="1" hidden>
+        <p class="tutorial-lead">每张牌都带一个天干或地支，也带一个五行属性。合局时，牌名决定能否成局，五行决定产出。</p>
+        <h3>十天干</h3>
+        <div class="tutorial-cards stems">
+          <span class="tut-card" data-el="木">甲<small>木</small></span>
+          <span class="tut-card" data-el="木">乙<small>木</small></span>
+          <span class="tut-card" data-el="火">丙<small>火</small></span>
+          <span class="tut-card" data-el="火">丁<small>火</small></span>
+          <span class="tut-card" data-el="土">戊<small>土</small></span>
+          <span class="tut-card" data-el="土">己<small>土</small></span>
+          <span class="tut-card" data-el="金">庚<small>金</small></span>
+          <span class="tut-card" data-el="金">辛<small>金</small></span>
+          <span class="tut-card" data-el="水">壬<small>水</small></span>
+          <span class="tut-card" data-el="水">癸<small>水</small></span>
+        </div>
+        <h3>十二地支</h3>
+        <div class="tutorial-cards branches">
+          <span class="tut-card" data-el="木">寅<small>木</small></span>
+          <span class="tut-card" data-el="木">卯<small>木</small></span>
+          <span class="tut-card" data-el="火">巳<small>火</small></span>
+          <span class="tut-card" data-el="火">午<small>火</small></span>
+          <span class="tut-card" data-el="金">申<small>金</small></span>
+          <span class="tut-card" data-el="金">酉<small>金</small></span>
+          <span class="tut-card" data-el="水">亥<small>水</small></span>
+          <span class="tut-card" data-el="水">子<small>水</small></span>
+          <span class="tut-card" data-el="土">辰<small>土</small></span>
+          <span class="tut-card" data-el="土">戌<small>土</small></span>
+          <span class="tut-card" data-el="土">丑<small>土</small></span>
+          <span class="tut-card" data-el="土">未<small>土</small></span>
+        </div>
+        <div class="tutorial-note">手牌按五行归入五个槽位。天干与地支不能混在同一个组合中。</div>
+      </section>
+
+      <section class="tutorial-step" data-step="2" hidden>
+        <p class="tutorial-lead">选一个月令，再选任意一张天干或地支，直接看它在这个月令下的旺衰和单牌分。</p>
+        <div class="inspect-panel">
+          <div class="inspect-block">
+            <span class="inspect-label">月令</span>
+            <div class="inspect-months" id="inspect-months"></div>
+          </div>
+          <div class="inspect-block">
+            <span class="inspect-label">选牌</span>
+            <div class="inspect-cards" id="inspect-cards"></div>
+          </div>
+          <div class="inspect-output" id="inspect-output"></div>
+        </div>
+        <div class="tutorial-note">单牌按自身五行算旺衰；合局则要求<b>合出的五行当月旺</b>。可以随便换月令和牌，看熟为止。</div>
+      </section>
+
+      <section class="tutorial-step" data-step="3" hidden>
+        <p class="tutorial-lead">把 1–3 张牌拖入中间「出牌池」：单张自动转化，多张能合会自动合成；看牌形，记住两件事：<b>哪些牌能合</b>、<b>合出什么五行</b>。</p>
+        <div class="combo-note">以下所有合局都必须满足：<b>合出的五行 = 当前月令五行（旺）</b>。</div>
+        <div class="combo-figures">
+          <div class="combo-figure">
+            <div class="combo-figure-head"><b>三会</b><span>+5 · 3 张</span></div>
+            <div class="fig-line">
+              <i class="fig-card" data-el="木">寅</i><i class="fig-card" data-el="木">卯</i><i class="fig-card" data-el="土">辰</i>
+              <em class="fig-arrow">→</em><strong class="fig-out" data-el="木">木</strong>
+            </div>
+            <small>同方三支会成一气</small>
+          </div>
+          <div class="combo-figure">
+            <div class="combo-figure-head"><b>三合</b><span>+4 · 3 张</span></div>
+            <div class="fig-triangle">
+              <i class="fig-card pos-a" data-el="金">申</i>
+              <i class="fig-card pos-b" data-el="水">子</i>
+              <i class="fig-card pos-c" data-el="土">辰</i>
+              <strong class="fig-out tri-out" data-el="水">水</strong>
+            </div>
+            <small>三支成三角，合化中神</small>
+          </div>
+          <div class="combo-figure">
+            <div class="combo-figure-head"><b>六合</b><span>+3 · 2 张</span></div>
+            <div class="fig-line">
+              <i class="fig-card" data-el="水">子</i><i class="fig-card" data-el="土">丑</i>
+              <em class="fig-arrow">→</em><strong class="fig-out" data-el="土">土</strong>
+            </div>
+            <small>一支一合，阴阳相配</small>
+          </div>
+          <div class="combo-figure">
+            <div class="combo-figure-head"><b>半合</b><span>+2 · 2 张</span></div>
+            <div class="fig-line">
+              <i class="fig-card" data-el="金">申</i><i class="fig-card" data-el="水">子</i>
+              <em class="fig-arrow">→</em><strong class="fig-out" data-el="水">水</strong>
+            </div>
+            <small>三合中带中神的两支</small>
+          </div>
+          <div class="combo-figure">
+            <div class="combo-figure-head"><b>拱合</b><span>+1 · 2 张</span></div>
+            <div class="fig-line">
+              <i class="fig-card" data-el="木">寅</i><i class="fig-card" data-el="土">戌</i>
+              <em class="fig-arrow">→</em><strong class="fig-out" data-el="火">火</strong>
+            </div>
+            <small>三合中不带中神的两支</small>
+          </div>
+          <div class="combo-figure">
+            <div class="combo-figure-head"><b>天干五合</b><span>+3 · 2 张</span></div>
+            <div class="fig-line">
+              <i class="fig-card" data-el="木">甲</i><i class="fig-card" data-el="土">己</i>
+              <em class="fig-arrow">→</em><strong class="fig-out" data-el="土">土</strong>
+            </div>
+            <small>两天干相合，化出一行</small>
+          </div>
+        </div>
+        <div class="tutorial-note">天干与地支不能混组；一回合只能结算一个组合。图中是结构示意，实际仍以当月旺衰判定。</div>
+      </section>
+
+      <section class="tutorial-step" data-step="4" hidden>
+        <p class="tutorial-lead">每回合揭示、换月后进入摸牌；想出牌阶段换牌时，用一次「弃1摸1」。</p>
+        <h3>摸牌</h3>
+        <div class="draw-flow">
+          <div class="flow-box"><b>公共牌池</b><span>4 天干 + 4 地支</span></div>
+          <i>→</i>
+          <div class="flow-box"><b>赢家</b><span>0–2 张</span></div>
+          <i>→</i>
+          <div class="flow-box"><b>输家</b><span>0–1 张</span></div>
+        </div>
+        <div class="draw-facts">
+          <span>手牌打空：下次直接补满 8 张，不进牌池</span>
+          <span>摸牌 60 秒；赢家超时拿前 2 张，输家超时不摸</span>
+          <span>牌面只对当前选牌者可见，对手只看到天干/地支类型</span>
+        </div>
+        <h3>弃 1 摸 1</h3>
+        <div class="swap-lesson">
+          <div class="swap-flow">
+            <span>弃 1 张</span><i>→</i><span>4 天干 + 4 地支暗池</span><i>→</i><span>盲选 1 张</span>
+          </div>
+          <div class="swap-backs-mini" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <p>每回合一次 · 不消耗出牌权 · 只显示牌背 · 其余 7 张丢弃 · 取消则原牌退回。</p>
+        </div>
+        <div class="tutorial-note">进阶：摸牌阶段可花 5 总分刷新自己的牌池；赢家刷新只影响自己的池，输家仍拿未刷新的原池。</div>
+      </section>
+
+      <section class="tutorial-step" data-step="5" hidden>
+        <p class="tutorial-lead">分数只看三件事：单牌旺衰、合局产出、双方相克。仍然用木在寅月举例。</p>
+        <div class="score-examples">
+          <div class="score-example">
+            <span>单牌</span>
+            <b>木 · 寅月</b>
+            <strong>5 + 2×2 = <em>9</em></strong>
+          </div>
+          <div class="score-example">
+            <span>合局</span>
+            <b>三会木 · 寅月</b>
+            <strong>5×3 + 5 + 2 = <em>22</em></strong>
+          </div>
+          <div class="score-example">
+            <span>月令支</span>
+            <b>单出当月地支</b>
+            <strong>5 + 5 = <em>10</em></strong>
+          </div>
+        </div>
+        <div class="win-flow">
+          <span>12 回合</span><i>→</i>
+          <span>比较双方总分</span><i>→</i>
+          <span>高者胜 · 相同平局</span>
+        </div>
+        <ul class="tutorial-list compact">
+          <li>赢家把本回合分差加到总分；平局或双方空过不加分。</li>
+          <li>相克只在本回合结算：木克土、土克水、水克火、火克金、金克木，克方 +1、被克方 −1。</li>
+          <li>第 12 回合结束后终局，不再换月、不再摸牌。</li>
+        </ul>
+      </section>
     </div>
 
-    <!-- 照片标签 -->
-    <div class="photo-caption">🌸 小英 🌸</div>
+    <footer class="tutorial-foot">
+      <button class="btn ghost" id="tutorial-prev" type="button" disabled>上一步</button>
+      <span id="tutorial-count">1 / 5</span>
+      <button class="btn primary" id="tutorial-next" type="button">下一步</button>
+    </footer>
+  </dialog>
 
-    <!-- 装饰分隔线 -->
-    <div class="divider">
-      <span>~</span> ✨ ❤️ ✨ <span>~</span>
-    </div>
 
-    <p>可爱的小英，<br>愿你新的一岁平安喜乐，梦想成真！<br>网络有延迟，我的祝福没有！ ❤️</p>
-    
-    <button class="surprise-btn" id="surpriseBtn">🎁 点击领取专属祝福</button>
-    <div id="hiddenWish" class="hidden-wish">
-      <p style="margin:0; color:#856404; font-weight:bold;">
-        你是我见过最温暖的人，<br>
-        愿所有美好都如期而至！<br>
-        记得喂小火人！！！<br>
-        （永远支持你的杰）
-      </p>
+  <dialog id="swap-dialog" class="swap-dialog" aria-labelledby="swap-title">
+    <div class="swap-head">
+      <h2 id="swap-title">弃 1 摸 1</h2>
+      <span>4 天干 + 4 地支 · 牌面隐藏</span>
     </div>
+    <div class="swap-body">
+      <p>已弃掉 <b id="swap-discard-name">—</b>。从下面 8 张暗牌里选 1 张；选中前看不到具体牌面。</p>
+      <div class="swap-pool" id="swap-pool"></div>
+      <div class="swap-actions">
+        <button class="btn ghost" data-act="swap-cancel">取消换牌</button>
+      </div>
+    </div>
+  </dialog>
+
+  <div class="overlay" id="overlay" hidden>
+    <div class="overlay-card" id="overlay-card"></div>
   </div>
 
-  <!-- 音乐开关按钮 -->
-  <button class="music-toggle" id="musicBtn">🔊</button>
-
-  <script>
-    // ============ 彩色纸片生成器 ============
-    const confettiContainer = document.getElementById('confettiContainer');
-    const colors = [
-      '#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#ff922b',
-      '#ff6eb4', '#845ef7', '#20c997', '#f06595', '#ffa94d',
-      '#94d82d', '#fcc419', '#ff8787', '#ff6b6b', '#ffd93d'
-    ];
-    const shapes = ['circle', 'square', 'triangle'];
-
-    // 创建一个彩带碎片，动画结束后自动移除
-    function spawnConfettiPiece() {
-      const piece = document.createElement('div');
-      const shape = shapes[Math.floor(Math.random() * shapes.length)];
-      const color = colors[Math.floor(Math.random() * colors.length)];
-
-      piece.className = `confetti-piece ${shape}`;
-      piece.style.left = Math.random() * 100 + '%';
-      piece.style.backgroundColor = shape !== 'triangle' ? color : 'transparent';
-      if (shape === 'triangle') {
-        piece.style.borderBottomColor = color;
-      }
-      // 下落持续 3~6 秒
-      piece.style.animationDuration = (Math.random() * 3 + 3) + 's';
-      // 随机延迟，避免所有碎片同时开始
-      piece.style.animationDelay = Math.random() * 2 + 's';
-      piece.style.width = (Math.random() * 10 + 6) + 'px';
-      piece.style.height = shape !== 'triangle' ? (Math.random() * 10 + 6) + 'px' : '0';
-
-      // 动画结束后自动移除
-      piece.addEventListener('animationend', function() {
-        piece.remove();
-      });
-
-      confettiContainer.appendChild(piece);
-    }
-
-    // 一次性生成大量彩带（用于点击惊喜按钮）
-    function burstConfetti(count) {
-      for (let i = 0; i < count; i++) {
-        // 错开生成，避免所有碎片同时落下
-        setTimeout(function() {
-          spawnConfettiPiece();
-        }, Math.random() * 800);
-      }
-    }
-
-    // 持续不断生成彩带
-    function startContinuousConfetti() {
-      // 初始来一波
-      burstConfetti(60);
-      // 每隔一小段时间生成几个碎片，保持彩带不断
-      setInterval(function() {
-        for (let i = 0; i < 3; i++) {
-          spawnConfettiPiece();
-        }
-      }, 300);
-    }
-
-    // ============ 音乐控制 ============
-    const bgm = document.getElementById('bgm');
-    const musicBtn = document.getElementById('musicBtn');
-    let musicPlaying = true;
-
-    function updateMusicIcon() {
-      musicBtn.textContent = musicPlaying ? '🔊' : '🔇';
-    }
-
-    function playMusic() {
-      bgm.play().then(() => {
-        musicPlaying = true;
-        updateMusicIcon();
-        console.log('✅ 音乐开始播放');
-      }).catch((err) => {
-        console.log('⏳ 音乐播放需要用户交互:', err.message);
-        musicPlaying = false;
-        updateMusicIcon();
-      });
-    }
-
-    function toggleMusic() {
-      if (musicPlaying) {
-        bgm.pause();
-        musicPlaying = false;
-      } else {
-        playMusic();
-      }
-      updateMusicIcon();
-    }
-
-    // 页面加载时尝试自动播放
-    window.addEventListener('load', () => {
-      console.log('📄 页面加载完成');
-      
-      // 启动彩带
-      startContinuousConfetti();
-      
-      // 尝试自动播放音乐
-      playMusic();
-      
-      // 如果自动播放失败，在用户第一次交互时播放
-      if (!musicPlaying) {
-        const playOnInteraction = () => {
-          playMusic();
-          document.removeEventListener('click', playOnInteraction);
-          document.removeEventListener('touchstart', playOnInteraction);
-          document.removeEventListener('scroll', playOnInteraction);
-        };
-        
-        document.addEventListener('click', playOnInteraction, { once: true });
-        document.addEventListener('touchstart', playOnInteraction, { once: true });
-        document.addEventListener('scroll', playOnInteraction, { once: true });
-      }
-    });
-
-    // 如果DOM已经加载完成（以防万一）
-    if (document.readyState === 'complete') {
-      startContinuousConfetti();
-      playMusic();
-    }
-
-    // 音乐按钮点击事件
-    musicBtn.addEventListener('click', toggleMusic);
-
-    // 监听音乐播放状态
-    bgm.addEventListener('play', () => {
-      musicPlaying = true;
-      updateMusicIcon();
-    });
-    
-    bgm.addEventListener('pause', () => {
-      musicPlaying = false;
-      updateMusicIcon();
-    });
-
-    // ============ 隐藏祝福 ============
-    document.getElementById('surpriseBtn').addEventListener('click', function() {
-      const wish = document.getElementById('hiddenWish');
-      wish.style.display = 'block';
-      
-      // 点击时额外发射一波彩带
-      burstConfetti(80);
-      
-      // 如果音乐还没播放，点击后播放
-      if (!musicPlaying) {
-        playMusic();
-      }
-      
-      // 平滑滚动到祝福区域（仅大屏幕需要）
-      if (window.innerWidth > 768) {
-        wish.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    });
-  </script>
+  <script type="module" src="./src/main.js"></script>
 </body>
 </html>
